@@ -142,9 +142,10 @@
             content.appendChild(Text);
             newDiv.appendChild(SaveButton);
             SaveButton.appendChild(SaveButtonLabel);
-            $(newDiv).hide().appendTo('#main').fadeIn(300).draggable().on('drag:start', function () {
-                $(this).zIndex(++noteZindex);
-            });
+            $(newDiv).hide().appendTo('#main').fadeIn(300).draggable();
+            //.on('drag:start', function () {
+            //    $(this).zIndex(++noteZindex);
+            //});
             $(SaveButton).on('click', function(button) {
                 alert(button.id);
             });
