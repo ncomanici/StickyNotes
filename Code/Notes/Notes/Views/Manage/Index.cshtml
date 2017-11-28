@@ -1,0 +1,47 @@
+﻿@model Notes.Models.IndexViewModel
+@{
+    ViewBag.Title = "Manage";
+}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"> </script>
+<style>
+    body {
+        background: url("https://www.walldevil.com/wallpapers/a26/titles-background-papers-wallpaper-resources-lol-images-wallpapers.jpg") no-repeat fixed center;
+        color: #002080;
+        font-family: 'Indie Flower', cursive;
+    }
+
+    h1 {
+        color: #26004d;
+        text-align: center;
+        font-size: 3.25em;
+        font-weight: bold;
+        font-family: 'Indie Flower', cursive;
+    }
+</style>
+<h1>@ViewBag.Title</h1>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div>
+    <h2>Change your account settings</h2>
+    <hr />
+    <dl class="dl-horizontal">
+        <h3>
+            <dt>Password:</dt>
+            <dd>
+
+                @if (Model.HasPassword)
+            {
+                    @Html.ActionLink("Change your password", "ChangePassword")
+                }
+                else
+                {
+                    @Html.ActionLink("Create", "SetPassword")
+                }
+
+            </dd>
+        </h3>
+    </dl>
+</div>

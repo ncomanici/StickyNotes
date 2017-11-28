@@ -1,0 +1,80 @@
+﻿@using Notes.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Log in";
+}
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"> </script>
+<h1>Log In</h1>
+<style>
+    body {
+        background: url("https://www.walldevil.com/wallpapers/a26/titles-background-papers-wallpaper-resources-lol-images-wallpapers.jpg") no-repeat fixed center;
+        color: #002080;
+        font-family: 'Indie Flower', cursive;
+    }
+
+    h1 {
+        color: #26004d;
+        text-align: center;
+        font-size: 3.25em;
+        font-weight: bold;
+        font-family: 'Indie Flower', cursive;
+    }
+
+    label {
+        font-size: 1.5em;
+        position: relative;
+        right: 1.2em;
+    }
+</style>
+<br />
+<br />
+<br />
+<div class="container text-center" display="inline-block" style="width:43%">
+    <div class="row">
+        <section id="loginForm">
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email, new { @class = "col-md-3 control-label" })
+
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Password, new { @class = "col-md-3 control-label" })
+
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="form-group">
+
+                    <div class="checkbox">
+                        @Html.CheckBoxFor(m => m.RememberMe)
+                        @Html.LabelFor(m => m.RememberMe)
+                    </div>
+
+                </div>
+                <div class="form-group">
+
+                    <input type="submit" value="Log in" class="btn btn-primary"
+
+                </div>
+                @* Enable this once you have account confirmation enabled for password reset functionality
+                    <p>
+                        @Html.ActionLink("Forgot your password?", "ForgotPassword")
+                    </p>*@
+            }
+        </section>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

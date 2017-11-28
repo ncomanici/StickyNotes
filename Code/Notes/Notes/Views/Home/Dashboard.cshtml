@@ -1,0 +1,159 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="~/Content/bootstrap.css">
+    <script src="~/Scripts/jquery-3.1.1.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
+    <title>STICKY NOTES</title>
+    <style>
+        body {
+            background: url("https://www.walldevil.com/wallpapers/a26/titles-background-papers-wallpaper-resources-lol-images-wallpapers.jpg") no-repeat fixed center;
+            color: #002080;
+            font-family: 'Indie Flower', cursive;
+        }
+
+        h1 {
+            text-align: center;
+            color: #002080;
+            font-family: 'Indie Flower', cursive;
+            font-weight: bold;
+        }
+
+        .note {
+            float: left;
+            display: block;
+            position: relative;
+            padding: 1em;
+            width: 300px;
+            min-height: 300px;
+            margin: 0 30px 30px 0;
+            background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.25));
+            background: linear-gradient(top, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.25));
+            background-color: #FFFD75;
+            box-shadow: 5px 5px 10px -2px rgba(33, 33, 33, 0.3);
+            -webkit-transform: rotate(2deg);
+            transform: rotate(2deg);
+            -webkit-transform: skew(-1deg, 1deg);
+            transform: skew(-1deg, 1deg);
+            -webkit-transition: -webkit-transform .15s;
+            transition: -webkit-transform .15s;
+            transition: transform .15s;
+            transition: transform .15s, -webkit-transform .15s;
+            z-index: 1;
+        }
+
+            .note:nth-child(even) {
+                -o-transform: rotate(4deg);
+                -webkit-transform: rotate(4deg);
+                -moz-transform: rotate(4deg);
+                position: relative;
+                top: 5px;
+                background-color: rgb(65, 140, 252);
+            }
+
+            .note:nth-child(3n) {
+                -o-transform: rotate(-3deg);
+                -webkit-transform: rotate(-3deg);
+                -moz-transform: rotate(-3deg);
+                position: relative;
+                top: -5px;
+                background-color: lawngreen;
+            }
+
+            .note:nth-child(5n) {
+                -o-transform: rotate(5deg);
+                -webkit-transform: rotate(5deg);
+                -moz-transform: rotate(5deg);
+                position: relative;
+                top: -10px;
+                background-color: pink;
+            }
+
+            .note:hover {
+                -webkit-transform: scale(1.25);
+                -moz-transform: scale(1.25);
+                -o-transform: scale(1.25);
+                -moz-box-shadow: 10px 10px 7px rgba(0,0,0,.7);
+                -webkit-box-shadow: 10px 10px 7px rgba(0,0,0,.7);
+                box-shadow: 10px 10px 7px rgba(0,0,0,.7);
+                z-index: 5;
+            }
+
+        .title {
+            background-color: rgba(0, 0, 0, 0);
+            border: 0;
+        }
+
+        .cnt {
+            background-color: rgba(0, 0, 0, 0);
+            border: 0;
+        }
+
+        .nav-tabs {
+            background-color: #F8F8F8;
+            border-color: #E7E7E7;
+            top: 0;
+            position: fixed;
+            width: 100%;
+            z-index: 5;
+        }
+    </style>
+</head>
+@{
+    ViewBag.Title = "Home Page";
+}
+<body>
+    <button style ="float:right;"type="button" class="btn btn-primary" onClick="addFunction()">Add New Note</button>
+    <h1>Sticky Notes</h1>
+    <div class="container" style="padding:2%" id="main">
+    </div>
+    <script>
+        var noteNumber = 1;
+        function addFunction() {
+            var noteZindex = 1;
+            var newDiv = document.createElement("form");
+            newDiv.setAttribute("class", "note");
+            newDiv.setAttribute("id", noteNumber++);
+            var XButton = document.createElement("a");
+            XButton.setAttribute("class", "button");
+            XButton.setAttribute("id", "remove");
+            var Xul = document.createTextNode("X");
+            var content = document.createElement("div");
+            content.setAttribute("class", "note_cnt");
+            var Title = document.createElement("textarea");
+            var Text = document.createElement("textarea");
+            Title.setAttribute("class", "title");
+            Title.setAttribute("placeholder", "Enter note title");
+            Text.setAttribute("class", "cnt");
+            Text.setAttribute("placeholder", "Enter note description here");
+            var SaveButton = document.createElement("a");
+            SaveButton.setAttribute("class", "button");
+            SaveButton.setAttribute("id", "save");
+            var SaveButtonLabel = document.createTextNode("Save");
+            newDiv.appendChild(XButton);
+            XButton.appendChild(Xul);
+            newDiv.appendChild(content);
+            content.appendChild(Title);
+            content.appendChild(Text);
+            newDiv.appendChild(SaveButton);
+            SaveButton.appendChild(SaveButtonLabel);
+            $(newDiv).hide().appendTo('#main').show("fade", 300).draggable().on('drag:start', function () {
+                $(this).zIndex(++noteZindex);
+            });
+            $(SaveButton).on('click', function(button) {
+                alert(button.id);
+            });
+        }
+    </script>
+    <script>
+        $(document).on('click', '#remove', function () {
+            $(this).parent('.note').hide("puff", { percent: 133 }, 250);
+        });
+        $(document).ready(addFunction());
+    </script>
+</body>
+
+</html>

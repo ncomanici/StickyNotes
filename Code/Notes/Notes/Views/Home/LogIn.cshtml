@@ -1,0 +1,52 @@
+﻿<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"> </script>
+<h1>Log In</h1>
+<style>
+    body {
+        background: url("https://www.walldevil.com/wallpapers/a26/titles-background-papers-wallpaper-resources-lol-images-wallpapers.jpg") no-repeat fixed center;
+        color: #002080;
+        font-family: 'Indie Flower', cursive;
+    }
+
+    h1 {
+        color: #26004d;
+        text-align: center;
+        font-size: 3.25em;
+        font-weight: bold;
+        font-family: 'Indie Flower', cursive;
+    }
+</style>
+@{
+    ViewBag.Title = "Login";
+}
+<br />
+<br />
+<br />
+<div class="container text-center" style=" width:30%; top:30%">
+    <form>
+        <div class="form">
+            <label for="user name" style="font-size:2.5em">User name</label>
+            <input type="text" class="form-control" id="user name" placeholder="Enter User name" style="height: 3em; position:relative; left:6%">
+        </div>
+
+        <div class="form">
+            <label for="password" style="font-size:2.5em"> Password </label>
+            <input type="password" class="form-control" id="Password" placeholder="Enter Password" style="height: 3em; position:relative; left:6%">
+        </div>
+        <button type="button" class="btn btn-link btn-lg">
+            <a href="~/Views/Home/Forgot.cshtml">
+                Forgot Password
+            </a>
+        </button>
+        <br>
+        <button type="button" class="btn btn-primary btn-lg">
+            Log In
+        </button>
+
+       
+
+    </form>
+</div>
+
