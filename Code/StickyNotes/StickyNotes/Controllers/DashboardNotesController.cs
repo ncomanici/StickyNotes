@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using StickyNotes.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace StickyNotes.Controllers
 {
@@ -17,8 +19,21 @@ namespace StickyNotes.Controllers
         // GET: DashboardNotes
         public ActionResult Index()
         {
-            var dashboardNotes = db.DashboardNotes.Include(d => d.ApplicationUser);
-            return View(dashboardNotes.ToList());
+            // get current logged user
+            ApplicationUser currentUser = this.CurrentUser;
+
+            if (currentUser != null)
+            {
+                // load notes for logged in user
+                string userId = User.Identity.GetUserId();
+                var dashboardNotes = db.DashboardNotes.Include(d => d.ApplicationUser).Where(d => d.ApplicationUserId == userId);
+                return View(dashboardNotes.ToList());
+            }
+            else
+            {
+                // if no user is logged in, then redirect to login
+                return Redirect("/Account/Login");
+            }
         }
 
         // GET: DashboardNotes/Details/5
@@ -34,6 +49,50 @@ namespace StickyNotes.Controllers
                 return HttpNotFound();
             }
             return View(dashboardNote);
+        }
+
+        private ApplicationUser CurrentUser
+        {
+            get
+            {
+                UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+                return userManager.FindById(User.Identity.GetUserId());
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Save(int id, string title, string description)
+        {
+            // get current logged user
+            ApplicationUser currentUser = this.CurrentUser;
+
+            if (currentUser != null)
+            {
+                DashboardNote dashboardNote;
+                if (id == -1)
+                {
+                    dashboardNote = new DashboardNote();
+                    db.DashboardNotes.Add(dashboardNote);
+                }
+                else
+                {
+                    dashboardNote = db.DashboardNotes.Find(id);
+                }
+
+                // populate the fields
+                dashboardNote.Title = title;
+                dashboardNote.Description = description;
+                dashboardNote.ApplicationUser = currentUser;
+
+                // update changes in database
+                db.SaveChanges();
+
+                return Json(dashboardNote);
+            }
+            else
+            {
+                return new HttpUnauthorizedResult("You are not logged in.");
+            }
         }
 
         // GET: DashboardNotes/Create

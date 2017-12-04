@@ -113,12 +113,24 @@
     <div class="container" style="padding:2%" id="main">
     </div>
     <script>
-        var noteNumber = 1;
-        function addFunction() {
+        //const Item = ({ url, img, title }) => `
+        //      <a href="${url}" class="list-group-item">
+        //        <div class="image">
+        //          <img src="${img}" />
+        //        </div>
+        //        <p class="list-group-item-text">${title}</p>
+        //      </a>
+        //    `;
+
+        function addNewNote() {
+            addNote(-1, 'Enter title', 'Enter description');
+        }
+
+        function addNote(id, title, description) {
             var noteZindex = 1;
             var newDiv = document.createElement("form");
             newDiv.setAttribute("class", "note");
-            newDiv.setAttribute("id", noteNumber++);
+            newDiv.setAttribute("id", id);
             var XButton = document.createElement("a");
             XButton.setAttribute("class", "button");
             XButton.setAttribute("id", "remove");
@@ -128,9 +140,13 @@
             var Title = document.createElement("textarea");
             var Text = document.createElement("textarea");
             Title.setAttribute("class", "title");
+            Title.setAttribute("id", "title-" + id);
+            Title.innerHTML = title;
             Title.setAttribute("placeholder", "Enter note title");
             Text.setAttribute("class", "cnt");
             Text.setAttribute("placeholder", "Enter note description here");
+            Text.setAttribute("id", "text-" + id);
+            Text.innerHTML = description;
             var SaveButton = document.createElement("a");
             SaveButton.setAttribute("class", "button");
             SaveButton.setAttribute("id", "save");
@@ -142,20 +158,48 @@
             content.appendChild(Text);
             newDiv.appendChild(SaveButton);
             SaveButton.appendChild(SaveButtonLabel);
-            $(newDiv).hide().appendTo('#main').fadeIn(300).draggable();
+            $(newDiv).appendTo('#main');
+            //$(newDiv).hide().appendTo('#main').fadeIn(300);//.draggable();
             //.on('drag:start', function () {
             //    $(this).zIndex(++noteZindex);
             //});
-            $(SaveButton).on('click', function(button) {
-                alert(button.id);
+
+            $(SaveButton).on('click', function (button) {
+
+                var note = this.parentElement;
+                var id = note.getAttribute("id");
+                var title = $("#title-" + id)[0].innerHTML;
+                var description = $("#text-" + id)[0].innerHTML;
+
+                $.ajax({
+                    type: "POST",
+                    url: "/DashboardNotes/Save",
+                    data: "{'id':" + parseInt(id) + ", 'title':'" + title + "', 'description':'" + description + "'}",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: alert('done'),
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("Status: " + textStatus); alert("Error: " + errorThrown);
+                    }
+                });
             });
         }
-    </script>
-    <script>
+
         $(document).on('click', '#remove', function () {
             $(this).parent('.note').hide("puff", { percent: 133 }, 250);
         });
-        $(document).ready(addFunction());
+        $(document).ready(loadNotes());
+
+        function loadNotes()
+        {
+            @foreach (var item in Model)
+            {
+                <text>
+                    addNote(@item.Id,'@item.Title', '@item.Description');
+                </text>
+            }
+            addNewNote();
+        }
     </script>
 </body>
 
