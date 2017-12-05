@@ -1,5 +1,4 @@
 ﻿@model ICollection<StickyNotes.Models.DashboardNote>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -108,7 +107,7 @@
     ViewBag.Title = "Home Page";
 }
 <body>
-    <button style="float:right;" type="button" class="btn btn-primary" onClick="addFunction()">Add New Note</button>
+    <button style="float:right;" type="button" class="btn btn-primary" onClick="addNewNote()">Add New Note</button>
     <h1>Sticky Notes</h1>
     <div class="container" style="padding:2%" id="main">
     </div>
@@ -123,7 +122,11 @@
         //    `;
 
         function addNewNote() {
-            addNote(-1, 'Enter title', 'Enter description');
+            if ($("#title--1").length > 0) {
+                alert("note already exists");
+            } else {
+                addNote(-1, 'Enter title', 'Enter description');
+            }
         }
 
         function addNote(id, title, description) {
@@ -168,8 +171,8 @@
 
                 var note = this.parentElement;
                 var id = note.getAttribute("id");
-                var title = $("#title-" + id)[0].innerHTML;
-                var description = $("#text-" + id)[0].innerHTML;
+                var title = $("#title-" + id)[0].value;
+                var description = $("#text-" + id)[0].value;
 
                 $.ajax({
                     type: "POST",
@@ -177,10 +180,28 @@
                     data: "{'id':" + parseInt(id) + ", 'title':'" + title + "', 'description':'" + description + "'}",
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
-                    success: alert('done'),
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        alert("Status: " + textStatus); alert("Error: " + errorThrown);
-                    }
+                    success: alert('done')
+                    //error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    //    alert("Status: " + textStatus); alert("Error: " + errorThrown);
+                    //}
+                });
+            });
+
+            $(XButton).on('click', function (button) {
+
+                var note = this.parentElement;
+                var id = note.getAttribute("id");
+
+                $.ajax({
+                    type: "POST",
+                    url: "/DashboardNotes/Delete",
+                    data: "{'id':" + parseInt(id)+ "'}",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: alert('dashboard deleted')
+                    //error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    //    alert("Status: " + textStatus); alert("Error: " + errorThrown);
+                    //}
                 });
             });
         }
@@ -195,12 +216,11 @@
             @foreach (var item in Model)
             {
                 <text>
-                    addNote(@item.Id,'@item.Title', '@item.Description');
-                </text>
+            addNote(@item.Id,'@item.Title', '@item.Description');
+            </text>
             }
-            addNewNote();
+            // addNewNote();
         }
     </script>
 </body>
-
 </html>

@@ -154,29 +154,29 @@ namespace StickyNotes.Controllers
         }
 
         // GET: DashboardNotes/Delete/5
+        [HttpPost]
         public ActionResult Delete(int? id)
         {
+            // get current logged user
+            ApplicationUser currentUser = this.CurrentUser;
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            DashboardNote dashboardNote = db.DashboardNotes.Find(id);
+            var dashboardNote =
+                this.db.DashboardNotes.FirstOrDefault(
+                    d => (d.Id == id && d.ApplicationUserId == currentUser.Id));
+
             if (dashboardNote == null)
             {
-                return HttpNotFound();
+                return this.HttpNotFound();
             }
-            return View(dashboardNote);
-        }
 
-        // POST: DashboardNotes/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            DashboardNote dashboardNote = db.DashboardNotes.Find(id);
             db.DashboardNotes.Remove(dashboardNote);
             db.SaveChanges();
-            return RedirectToAction("Index");
+
+            return View(dashboardNote);
         }
 
         protected override void Dispose(bool disposing)
